@@ -4,18 +4,17 @@ const SETUSERS = "SET_USERS";
 
 let initialState = {
     users: [
-      { id: 1, photoURL: '', followed: true, fullName: "Dima", status: "I'm boss",
+      { id: 1, photos: '', followed: true, fullName: "Dima", status: "I'm boss",
        location: {city: "Minsk", country: "Bellarus"}},
-       { id: 2, photoURL: '', followed: true, fullName: "Dima", status: "I'm boss",
+       { id: 2, photos: '', followed: true, fullName: "Dima", status: "I'm boss",
        location: {city: "Minsk", country: "Bellarus"}},
-       { id: 3, photoURL: '', followed: true,  fullName: "Dima", status: "I'm boss",
+       { id: 3, photos: '', followed: true,  fullName: "Dima", status: "I'm boss",
        location: {city: "Minsk", country: "Bellarus"}},
-       { id: 4, photoURL: '', followed: true,  fullName: "Dima", status: "I'm boss",
+       { id: 4, photos: '', followed: true,  fullName: "Dima", status: "I'm boss",
        location: {city: "Minsk", country: "Bellarus"}},
      
     ],
   };
-
 
 const userReducer = (state = initialState, action) => {
     switch (action.type) {

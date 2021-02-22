@@ -4,7 +4,7 @@ import { addPostActionCreator, updateNewPostTextActionCreator } from '../../../r
 import MyPosts from './MyPosts';
 
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
     postData: state.profilePage.postData,
     newPostText: state.profilePage.newPostText
@@ -12,7 +12,7 @@ let mapStateToProps = (state) => {
 
 }
 
-let mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateNewPostTextActionCreator: (text) => {
       let action = updateNewPostTextActionCreator(text)

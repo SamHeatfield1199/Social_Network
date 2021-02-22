@@ -6,13 +6,13 @@ import Dialogs from './Dialogs';
 //создаем контейнер с помощью react-redux
 //двойные скобочки значат, что мы вызываем функцию вернувшуюся после вызова connect()
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return {
         messagesPage: state.messagesPage
     }
 }
 
-let mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         updateNewMessageBody: (body) => { 
             dispatch(updateNewMessageBodyCreator(body))
