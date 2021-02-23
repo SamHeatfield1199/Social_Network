@@ -1,34 +1,41 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { followActionCreator, setUsersActionCreator, unfollowActionCreator } from '../../redux/usersReducer';
+import { followActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, setUsersActionCreator, unfollowActionCreator } from '../../redux/usersReducer';
 import Users from './Users';
 
 
 let mapStateToProps = (state) => {
   return {
-    users: state.usersPage.users
+    users: state.usersPage.users,
+    pageSize: state.usersPage.pageSize,
+    totalUsersCount: state.usersPage.totalUsersCount,
+    currentPage: state.usersPage.currentPage
   }
-
 }
 
+//методы,которые диспатчат данные в стейт
 let mapDispatchToProps = (dispatch) => {
   return {
-    follow: (userId) => {
-      let action = followActionCreator(userId)
-      dispatch(action);
-    },
-    unfollow: (userId) => {
-        let action = unfollowActionCreator(userId)
-        dispatch(action);
-      },
-      setUsers: (users) => {
-        let action = setUsersActionCreator(users)
-        dispatch(action);
-      },
-  }
 
+    follow: (userId) => {
+      dispatch(followActionCreator(userId));
+    },
+
+    unfollow: (userId) => {
+      dispatch(unfollowActionCreator(userId));
+    },
+
+    setUsers: (users) => {
+      dispatch(setUsersActionCreator(users));
+    },
+
+    setCurrentPage: (pageNumber) => {
+      dispatch(setCurrentPageActionCreator(pageNumber))
+    },
+    setTotalUsersCount: (totalUsersCount) => {
+      dispatch(setTotalUsersCountActionCreator(totalUsersCount))
+    }
+  }
 }
 
 
-const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users)
-export default UsersContainer;
+export default connect(mapStateToProps, mapDispatchToProps)(Users)
