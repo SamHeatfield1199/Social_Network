@@ -4,7 +4,7 @@ import "./App.css";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
-import Profile from "./components/Profile/Profile";
+import ProfileContainer from "./components/Profile/ProfileContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 
 const App = (props) => {
@@ -27,9 +27,10 @@ const App = (props) => {
         />
 
         <Route
-          path="/profile"
+          path="/profile/:userid?"
           render={() => (
-            <Profile //store={props.store} dispatch={props.dispatch}
+            <ProfileContainer 
+            //store={props.store} dispatch={props.dispatch}
             />
           )}
         />

@@ -6,36 +6,7 @@ const SETTOTALUSERSCOUNT = "SET_TOTAL_USERS_COUNT";
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 
 let initialState = {
-  users: [
-    {
-      id: 1,
-      photos: "",
-      followed: true,
-      fullName: "Dima",
-      status: "I'm boss",
-    },
-    {
-      id: 2,
-      photos: "",
-      followed: true,
-      fullName: "Dima",
-      status: "I'm boss",
-    },
-    {
-      id: 3,
-      photos: "",
-      followed: true,
-      fullName: "Dima",
-      status: "I'm boss",
-    },
-    {
-      id: 4,
-      photos: "",
-      followed: true,
-      fullName: "Dima",
-      status: "I'm boss",
-    },
-  ],
+  users: [],
   pageSize: 5,
   totalUsersCount: 0,
   currentPage: 1,
