@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getUserProfie } from '../../api/api';
-import { setUserProfileAC } from '../../redux/profileReducer';
+import { getUserProfile } from '../../api/api';
+import { getUserProfileTC, setUserProfileAC } from '../../redux/profileReducer';
 import Profile from './Profile';
 
 //делаем классовым, чтобы можно было сделать запрос
@@ -14,10 +14,7 @@ class ProfileContainer extends React.Component {
     if (!userid) {
       userid = 2
     }
-    getUserProfie(userid)
-      .then(data => {
-        this.props.setUserProfile(data)
-      })
+    this.props.getUserProfile(userid)
   }
 
   render() {
@@ -39,5 +36,6 @@ let WithUrkDataContainerComponent = withRouter(ProfileContainer)
 
 //connect получает данные от стора 
 export default connect(mapStateToProps, {
-  setUserProfile: setUserProfileAC
+  setUserProfile: setUserProfileAC,
+  getUserProfile: getUserProfileTC
 })(WithUrkDataContainerComponent);

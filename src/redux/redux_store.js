@@ -1,6 +1,6 @@
 //работаем с redux
-
-import { combineReducers, createStore } from "redux";
+import  thunkMiddleware  from "redux-thunk";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import authReducer from "./authReducer";
 import dialogsReducer from "./dialogsReducer";
 import profileReducer from "./profileReducer";
@@ -16,7 +16,8 @@ let reducers = combineReducers({
 });
 
 //cоздаем наш store, передаем reducer
-let store = createStore(reducers);
+//applyMiddleware для промежуточныйх слоев(у нас это thunk)
+let store = createStore(reducers, applyMiddleware(thunkMiddleware));
 //глобально сохраняем объект store
 window.store = store;
 

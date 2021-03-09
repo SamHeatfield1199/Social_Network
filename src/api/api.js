@@ -18,14 +18,15 @@ export const authMe= () =>{
     return instance.get(`auth/me`,).then(response => response.data)
 }
 
-export const getUserProfie = (userid) =>{
+export const getUserProfile = (userid) =>{
     return instance.get(`profile/`+userid).then(response => response.data)
 } 
 export const unfollowUser= (id) =>{
     return instance.delete(`follow/${id}`).then(response => response.data)
 }
 export const followUser= (id) =>{
-    return instance.post(`follow/${id}`).then(response => response.data)
+    return instance.post(`follow/${id}`)
+.then(response => response.data)
 }
 
 

@@ -1,10 +1,12 @@
+import { followUser, getUsers } from "../api/api";
+
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
 const SETUSERS = "SET_USERS";
 const SETCURRENTPAGE = "SET_CURRENT_PAGE";
 const SETTOTALUSERSCOUNT = "SET_TOTAL_USERS_COUNT";
-const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
-const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS'
+const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
+const TOGGLE_IS_FOLLOWING_PROGRESS = "TOGGLE_IS_FOLLOWING_PROGRESS";
 
 let initialState = {
   users: [],
@@ -58,17 +60,17 @@ const userReducer = (state = initialState, action) => {
         ...state,
         totalUsersCount: action.count,
       };
-      case TOGGLE_IS_FETCHING:
+    case TOGGLE_IS_FETCHING:
       return {
         ...state,
         isFetching: action.isFetching,
       };
-      case TOGGLE_IS_FOLLOWING_PROGRESS:
+    case TOGGLE_IS_FOLLOWING_PROGRESS:
       return {
         ...state,
-        followingInProgress: action.isFetching ?
-        [...state.followingInProgress, action.userId ] 
-        : state.followingInProgress.filter(id => id != action.userId),
+        followingInProgress: action.isFetching
+          ? [...state.followingInProgress, action.userId]
+          : state.followingInProgress.filter((id) => id != action.userId),
       };
 
     default:
@@ -119,7 +121,45 @@ export const followingInProgressActionCreator = (isFetching, userId) => {
   return {
     type: TOGGLE_IS_FOLLOWING_PROGRESS,
     isFetching,
-    userId
+    userId,
+  };
+};
+
+//thunk - функция, которая выполняет асинхронную работу и диспатчит экшены, чтобы ui не создаввал запросы к dal
+//и все происходило в бизнес логике
+export const getUsersThunkCreator = (currentPage, pageSize) => {
+  return (dispatch) => {
+    dispatch(toggleIsfetchingActionCreator(true))
+
+    getUsers(currentPage, pageSize).then((data) => {
+      dispatch(toggleIsfetchingActionCreator(false));
+      dispatch(setUsersActionCreator(data.items));
+      dispatch(setTotalUsersCountActionCreator(data.totalCount));
+    });
+  };
+};
+
+export const followThunkCreator = (id) => {
+  return (dispatch) => {
+    dispatch(followingInProgressActionCreator(true, id))
+    followUser(id).then(data => {
+        if (data.resultCode == 0) {
+          dispatch(followActionCreator(id))
+        }
+        dispatch(followingInProgressActionCreator(false, id))
+    })
+  };
+};
+
+export const unfollowThunkCreator = (id) => {
+  return (dispatch) => {
+    dispatch(followingInProgressActionCreator(true, id))
+    followUser(id).then(data => {
+        if (data.resultCode == 0) {
+          dispatch(followActionCreator(id))
+        }
+        dispatch(followingInProgressActionCreator(false, id))
+    })
   };
 };
 

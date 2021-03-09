@@ -1,10 +1,12 @@
+import { authMe } from "../api/api";
+
 const SET_USER_DATA = "SET_USER_DATA";
 
 let initialState = {
   id: null,
   email: null,
   login: null,
-  isAuth: false
+  isAuth: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -13,18 +15,28 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.data,
-        isAuth: true
+        isAuth: true,
       };
     default:
       return state;
   }
 };
 
-
 export const setUserActionCreator = (id, email, login) => {
   return {
     type: SET_USER_DATA,
-    data: {id, email, login},
+    data: { id, email, login },
+  };
+};
+
+export const getAuthUserDataTC = () => {
+  return (dispatch) => {
+    authMe().then((data) => {
+      if (data.resultCode === 0) {
+        let { id, login, email } = data.data;
+        dispatch(setUserActionCreator(id, email, login));
+      }
+    });
   };
 };
 
