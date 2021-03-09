@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsers } from '../../api/api';
 import preloader from '../../images/2.gif';
-import { followActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, setUsersActionCreator, toggleIsfetchingActionCreator, unfollowActionCreator } from '../../redux/usersReducer';
+import { followActionCreator, followingInProgressActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, setUsersActionCreator, toggleIsfetchingActionCreator, unfollowActionCreator } from '../../redux/usersReducer';
 import Users from './Users';
 
 //контейерная компонета занимается побочными эффектами функции
@@ -12,7 +12,7 @@ class UsersContainer extends React.Component {
     componentDidMount() {
         //запрос на сервер для получения пользователей
         this.props.toggleIsFetching(true)
-        
+
         getUsers(this.props.currentPage, this.props.pageSize).then(data => {
                 this.props.toggleIsFetching(false)
                 this.props.setUsers(data.items)
@@ -40,7 +40,9 @@ class UsersContainer extends React.Component {
                 onPageChanged={this.onPageChanged}
                 users={this.props.users}
                 follow={this.props.follow}
-                unfollow={this.props.unfollow} />
+                unfollow={this.props.unfollow}
+                followInProgress={this.props.followInProgress} 
+                followingInProgress = {this.props.followingInProgress}/>
         </>
     }
 }
@@ -51,7 +53,8 @@ let mapStateToProps = (state) => {
       pageSize: state.usersPage.pageSize,
       totalUsersCount: state.usersPage.totalUsersCount,
       currentPage: state.usersPage.currentPage,
-      isFetching: state.usersPage.isFetching
+      isFetching: state.usersPage.isFetching,
+      followingInProgress: state.usersPage.followingInProgress
     }
   }
   
@@ -61,7 +64,9 @@ let mapStateToProps = (state) => {
     setUsers: setUsersActionCreator,
     setCurrentPage: setCurrentPageActionCreator,
     setTotalUsersCount: setTotalUsersCountActionCreator,
-    toggleIsFetching: toggleIsfetchingActionCreator
+    toggleIsFetching: toggleIsfetchingActionCreator,
+    followInProgress: followingInProgressActionCreator
+
   })
     (UsersContainer)
   

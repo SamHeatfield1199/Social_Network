@@ -1,8 +1,7 @@
-import * as axios from 'axios'
-import classes from './Users.module.css'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { followUser, unfollowUser } from '../../api/api'
+import classes from './Users.module.css'
 //просто отрисовка
 let Users = (props) => {
 
@@ -32,20 +31,24 @@ let Users = (props) => {
                     </div>
                     <div>
                         {u.followed
-                            ? <button onClick={() => {
+                            ? <button disabled ={props.followingInProgress.some(id => id === u.id)}  onClick={() => {
+                                props.followInProgress(true, u.id)
                                 unfollowUser(u.id).then(data => {
                                     if (data.resultCode == 0) {
                                         props.unfollow(u.id);
                                     }
+                                    props.followInProgress(false, u.id)
                                 })
                             }
                             }>Unfollow</button>
-                            : <button onClick={
+                            : <button disabled ={props.followingInProgress.some(id => id === u.id)}  onClick={
                                 () => {
+                                    props.followInProgress(true, u.id)
                                         followUser(u.id).then(data => {
                                             if (data.resultCode == 0) {
                                                 props.follow(u.id);
                                             }
+                                            props.followInProgress(false, u.id)
                                         })
                                 }
                             }>Follow</button>
