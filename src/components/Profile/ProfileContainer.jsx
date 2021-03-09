@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { getUserProfile } from '../../api/api';
 import { getUserProfileTC, setUserProfileAC } from '../../redux/profileReducer';
 import Profile from './Profile';
@@ -18,6 +18,8 @@ class ProfileContainer extends React.Component {
   }
 
   render() {
+    //редирект на страницу логина. если не хотим показывать контент незарегестрированным пользователям, хорошее решение
+    if (this.props.isAuth === false) return <Redirect to = {"/login"}/>
     return (
       <div>
         <Profile {...this.props} profile={this.props.profile} />
@@ -28,14 +30,15 @@ class ProfileContainer extends React.Component {
 
 let mapStateToProps = (state) => {
   return {
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
+    isAuth: state.auth.isAuth
   }
 }
 //работает как коннект, но закинет еще данные мз урла
-let WithUrkDataContainerComponent = withRouter(ProfileContainer)
+let WithUrlDataContainerComponent = withRouter(ProfileContainer)
 
 //connect получает данные от стора 
 export default connect(mapStateToProps, {
   setUserProfile: setUserProfileAC,
   getUserProfile: getUserProfileTC
-})(WithUrkDataContainerComponent);
+})(WithUrlDataContainerComponent);
