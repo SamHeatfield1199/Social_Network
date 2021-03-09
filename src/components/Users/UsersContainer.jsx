@@ -1,9 +1,10 @@
-import * as axios from 'axios'
-import React from 'react'
-import Users from './Users'
-import preloader from '../../images/2.gif'
+import * as axios from 'axios';
+import React from 'react';
 import { connect } from 'react-redux';
+import { getUsers } from '../../api/api';
+import preloader from '../../images/2.gif';
 import { followActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, setUsersActionCreator, toggleIsfetchingActionCreator, unfollowActionCreator } from '../../redux/usersReducer';
+import Users from './Users';
 
 //контейерная компонета занимается побочными эффектами функции
 class UsersContainer extends React.Component {
@@ -11,21 +12,22 @@ class UsersContainer extends React.Component {
     componentDidMount() {
         //запрос на сервер для получения пользователей
         this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-            .then(response => {
+        
+        getUsers(this.props.currentPage, this.props.pageSize).then(data => {
                 this.props.toggleIsFetching(false)
-                this.props.setUsers(response.data.items)
-                this.props.setTotalUsersCount(response.data.totalCount)
+                this.props.setUsers(data.items)
+                this.props.setTotalUsersCount(data.totalCount)
             })
     }
 
     onPageChanged = (pageNumber) => {
+
         this.props.setCurrentPage(pageNumber)
         this.props.toggleIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
-            .then(response => {
+
+        getUsers(pageNumber, this.props.pageSize).then(data => {
                 this.props.toggleIsFetching(false)
-                this.props.setUsers(response.data.items)
+                this.props.setUsers(data.items)
             })
     }
 
@@ -50,35 +52,6 @@ let mapStateToProps = (state) => {
       totalUsersCount: state.usersPage.totalUsersCount,
       currentPage: state.usersPage.currentPage,
       isFetching: state.usersPage.isFetching
-    }
-  }
-  
-  //методы,которые диспатчат данные в стейт
-  let mapDispatchToProps = (dispatch) => {
-    return {
-  
-      follow: (userId) => {
-        dispatch(followActionCreator(userId));
-      },
-  
-      unfollow: (userId) => {
-        dispatch(unfollowActionCreator(userId));
-      },
-  
-      setUsers: (users) => {
-        dispatch(setUsersActionCreator(users));
-      },
-  
-      setCurrentPage: (pageNumber) => {
-        dispatch(setCurrentPageActionCreator(pageNumber))
-      },
-      setTotalUsersCount: (totalUsersCount) => {
-        dispatch(setTotalUsersCountActionCreator(totalUsersCount))
-      },
-      toggleIsFetching: (isFetching) => {
-        dispatch(toggleIsfetchingActionCreator(isFetching))
-      }
-  
     }
   }
   

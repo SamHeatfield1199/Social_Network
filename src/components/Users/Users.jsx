@@ -2,6 +2,7 @@ import * as axios from 'axios'
 import classes from './Users.module.css'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { followUser, unfollowUser } from '../../api/api'
 //просто отрисовка
 let Users = (props) => {
 
@@ -25,19 +26,27 @@ let Users = (props) => {
             props.users.map(u => <div key={u.id}>
                 <span>
                     <div className={classes.image}>
-                        <NavLink to = {'/profile/' + u.id}>
+                        <NavLink to={'/profile/' + u.id}>
                             < img src={u.photos.small != null ? u.photos.small : "https://www.pngfind.com/pngs/m/292-2924858_user-icon-business-man-flat-png-transparent-png.png"} />
                         </NavLink>
                     </div>
                     <div>
                         {u.followed
                             ? <button onClick={() => {
-                                props.unfollow(u.id)
+                                unfollowUser(u.id).then(data => {
+                                    if (data.resultCode == 0) {
+                                        props.unfollow(u.id);
+                                    }
+                                })
                             }
                             }>Unfollow</button>
                             : <button onClick={
                                 () => {
-                                    props.follow(u.id)
+                                        followUser(u.id).then(data => {
+                                            if (data.resultCode == 0) {
+                                                props.follow(u.id);
+                                            }
+                                        })
                                 }
                             }>Follow</button>
                         }

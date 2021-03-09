@@ -1,6 +1,7 @@
 //работаем с redux
 
 import { combineReducers, createStore } from "redux";
+import authReducer from "./authReducer";
 import dialogsReducer from "./dialogsReducer";
 import profileReducer from "./profileReducer";
 
@@ -10,7 +11,8 @@ import userReducer from "./usersReducer";
 let reducers = combineReducers({
   profilePage: profileReducer,
   messagesPage: dialogsReducer,
-  usersPage: userReducer
+  usersPage: userReducer,
+  auth: authReducer,
 });
 
 //cоздаем наш store, передаем reducer
