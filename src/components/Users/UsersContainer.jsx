@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import preloader from '../../images/2.gif';
 import { followActionCreator, followingInProgressActionCreator, followThunkCreator, getUsersThunkCreator, setCurrentPageActionCreator, unfollowActionCreator, unfollowThunkCreator } from '../../redux/usersReducer';
+import { withAuthRedirect } from '../hoc/AuthRedirect';
 import Users from './Users';
 
 //контейерная компонета занимается побочными эффектами функции
@@ -42,7 +43,7 @@ let mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, {
+export default withAuthRedirect(connect(mapStateToProps, {
   follow: followThunkCreator,
   setCurrentPage: setCurrentPageActionCreator,
   followInProgress: followingInProgressActionCreator,
@@ -50,7 +51,7 @@ export default connect(mapStateToProps, {
   unfollow: unfollowThunkCreator,
 
 })
-  (UsersContainer)
+  (UsersContainer))
 
 
 
