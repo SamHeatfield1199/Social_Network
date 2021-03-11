@@ -8,18 +8,17 @@ import { Redirect } from "react-router";
 
 
 //т.к. коннектится к стору спойкойно берет необходимые пропсы
-const mapStateToPropsForRedirect = (state) => {
-  return {
-      isAuth: state.auth.isAuth
-  }
-}
+const mapStateToPropsForRedirect = (state) => ({
+      isAuth: state.auth.isAuth 
+})
 //компонента хок для переадрисации на страницу логина.
 //Передаем в нее компоненту которую необходимо перерисовать в случае если пользователь залогинен
 export const withAuthRedirect = (Component) => {
 
   class RedirectComponent extends React.Component {
     render() {
-      if (!this.props.isAuth) return <Redirect to={"/login"} />;
+      console.log(this.props.isAuth)
+      if (!this.props.isAuth) return <Redirect to="/login" />;
       return <Component {...this.props} />;
     }
   }

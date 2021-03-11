@@ -26,14 +26,8 @@ const mapDispatchToProps = (dispatch) => {
 
 //вызывается функция, которую нам вернул первый вызов
 //В данном случае берет диалог и закидывает в редирект, потом в коннект
-/*compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    withAuthRedirect
-)(Dialogs)*/
-
-//очередная обертка над компонентой. По английски HOC
-let AuthRedirectComponent = withAuthRedirect(Dialogs)
-
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(AuthRedirectComponent)//моединили Dialods witn store
-//рендерит диалогс и передвет пропсы сидящие в ф1 и ф2
-export default DialogsContainer
+export default compose(
+    withAuthRedirect,
+    connect(mapStateToProps, mapDispatchToProps)
+    
+)(Dialogs)

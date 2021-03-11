@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import preloader from '../../images/2.gif';
 import { followActionCreator, followingInProgressActionCreator, followThunkCreator, getUsersThunkCreator, setCurrentPageActionCreator, unfollowActionCreator, unfollowThunkCreator } from '../../redux/usersReducer';
 import { withAuthRedirect } from '../hoc/AuthRedirect';
@@ -43,15 +44,16 @@ let mapStateToProps = (state) => {
   }
 }
 
-export default withAuthRedirect(connect(mapStateToProps, {
-  follow: followThunkCreator,
-  setCurrentPage: setCurrentPageActionCreator,
-  followInProgress: followingInProgressActionCreator,
-  getUsers: getUsersThunkCreator,
-  unfollow: unfollowThunkCreator,
-
-})
-  (UsersContainer))
-
+export default compose(
+  connect(mapStateToProps, {
+    follow: followThunkCreator,
+    setCurrentPage: setCurrentPageActionCreator,
+    followInProgress: followingInProgressActionCreator,
+    getUsers: getUsersThunkCreator,
+    unfollow: unfollowThunkCreator,
+  
+  }),
+  withAuthRedirect
+)(UsersContainer)
 
 

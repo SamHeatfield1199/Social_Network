@@ -1,4 +1,4 @@
-import { followUser, getUsers } from "../api/api";
+import { followUser, getUsers, userAPI } from "../api/api";
 
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
@@ -70,7 +70,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         followingInProgress: action.isFetching
           ? [...state.followingInProgress, action.userId]
-          : state.followingInProgress.filter((id) => id != action.userId),
+          : state.followingInProgress.filter((id) => id !== action.userId),
       };
 
     default:
@@ -131,7 +131,7 @@ export const getUsersThunkCreator = (currentPage, pageSize) => {
   return (dispatch) => {
     dispatch(toggleIsfetchingActionCreator(true))
 
-    getUsers(currentPage, pageSize).then((data) => {
+    userAPI.getUsers(currentPage, pageSize).then((data) => {
       dispatch(toggleIsfetchingActionCreator(false));
       dispatch(setUsersActionCreator(data.items));
       dispatch(setTotalUsersCountActionCreator(data.totalCount));
@@ -142,8 +142,8 @@ export const getUsersThunkCreator = (currentPage, pageSize) => {
 export const followThunkCreator = (id) => {
   return (dispatch) => {
     dispatch(followingInProgressActionCreator(true, id))
-    followUser(id).then(data => {
-        if (data.resultCode == 0) {
+    userAPI.followUser(id).then(data => {
+        if (data.resultCode === 0) {
           dispatch(followActionCreator(id))
         }
         dispatch(followingInProgressActionCreator(false, id))
@@ -154,8 +154,8 @@ export const followThunkCreator = (id) => {
 export const unfollowThunkCreator = (id) => {
   return (dispatch) => {
     dispatch(followingInProgressActionCreator(true, id))
-    followUser(id).then(data => {
-        if (data.resultCode == 0) {
+    userAPI.followUser(id).then(data => {
+        if (data.resultCode === 0) {
           dispatch(followActionCreator(id))
         }
         dispatch(followingInProgressActionCreator(false, id))

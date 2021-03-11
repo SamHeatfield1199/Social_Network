@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router-dom';
-import { getUserProfile } from '../../api/api';
-import { getUserProfileTC, setUserProfileAC } from '../../redux/profileReducer';
+import { compose } from 'redux';
+import { getUserProfileTC, setUserProfileAC, setUserStatusAC, setUserStatusTC, updateUserStatusTC } from '../../redux/profileReducer';
 import { withAuthRedirect } from '../hoc/AuthRedirect';
 import Profile from './Profile';
 
@@ -16,32 +16,41 @@ class ProfileContainer extends React.Component {
       userid = 2
     }
     this.props.getUserProfile(userid)
+    setTimeout(
+      () =>{
+        this.props.getUserStatus(userid)
+      }, 1000
+    )
+   
   }
 
   render() {
     //редирект на страницу логина. если не хотим показывать контент незарегестрированным пользователям, хорошее решение
     return (
       <div>
-        <Profile {...this.props} profile={this.props.profile} />
+        <Profile {...this.props}
+         profile={this.props.profile} 
+         status ={this.props.status}
+         updateUserStatus = {this.props.updateUserStatus}/>
       </div>
     );
   }
 }
 
-//вызвали хок с нужным параметром
-let AuthRedirectComponent = withAuthRedirect(ProfileContainer)
-
 let mapStateToProps = (state) => {
   return {
     profile: state.profilePage.profile,
+    status: state.profilePage.status,
   }
 }
 
-//работает как коннект, но закинет еще данные мз урла. Тоже хок
-let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent)
-
-//connect получает данные от стора 
-export default connect(mapStateToProps, {
-  setUserProfile: setUserProfileAC,
-  getUserProfile: getUserProfileTC
-})(WithUrlDataContainerComponent);
+export default compose(
+  connect(mapStateToProps, {
+    setUserProfile: setUserProfileAC,
+    getUserProfile: getUserProfileTC,
+    getUserStatus: setUserStatusTC,
+    updateUserStatus: updateUserStatusTC,
+  }),
+  withRouter,
+  withAuthRedirect
+)(ProfileContainer)
