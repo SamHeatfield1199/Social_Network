@@ -25,6 +25,14 @@ class ProfileStatus extends React.Component {
         })
         
     }
+/*Компонент монтируется один раз. А потом, когда в нём меняется 
+локальный стейт либо кто-то извне хочет перерисовать компонент и 
+закинуть в него новые пропсы.. То срабатывает метод жизненного цикла 
+componentDidMount
+*/
+
+
+
     componentDidUpdate(prevProps, prevState){
         if(prevProps.status!== this.props.status){
             this.setState({

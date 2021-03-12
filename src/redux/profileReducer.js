@@ -1,7 +1,6 @@
-import { getUserProfile, profileAPI, userAPI } from "../api/api";
+import { profileAPI } from "../api/api";
 
 const ADD_POST = "ADD-POST";
-const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
 const SET_STATUS = "SET_STATUS";
 
@@ -10,7 +9,6 @@ let initialState = {
     { id: 1, message: "Hi, how are you?", likesCount: "1" },
     { id: 2, message: "HIt`s my first post", likesCount: "23" },
   ],
-  newPostText: "text here",
   profile: null,
   status: "",
 };
@@ -19,22 +17,14 @@ const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST: {
       let newPost = {
-        id: 3,
-        message: state.newPostText,
+        id: 6,
+        message: action.newPostText,
         likesCount: 0,
       };
-
       return {
         ...state,
         postData: [...state.postData, newPost],
         newPostText: "",
-      };
-    }
-
-    case UPDATE_NEW_POST_TEXT: {
-      return {
-        ...state,
-        newPostText: action.newText,
       };
     }
     case SET_USER_PROFILE: {
@@ -49,21 +39,15 @@ const profileReducer = (state = initialState, action) => {
         status: action.status,
       };
     }
-
     default:
       return state;
   }
 };
 
-export const addPostActionCreator = () => {
+export const addPostActionCreator = (newPostText) => {
   return {
     type: ADD_POST,
-  };
-};
-export const updateNewPostTextActionCreator = (text) => {
-  return {
-    type: UPDATE_NEW_POST_TEXT,
-    newText: text,
+    newPostText,
   };
 };
 export const setUserProfileAC = (profile) => {
@@ -86,18 +70,15 @@ export const setUserStatusTC = (userid) => {
     });
   };
 };
-
 export const updateUserStatusTC = (status) => {
   return (dispatch) => {
-    
     profileAPI.updateStatus(status).then((data) => {
-      if(data.resultCode === 0){
+      if (data.resultCode === 0) {
         dispatch(setUserStatusAC(status));
       }
     });
   };
 };
-
 export const getUserProfileTC = (userid) => {
   return (dispatch) => {
     profileAPI.getUserProfile(userid).then((data) => {

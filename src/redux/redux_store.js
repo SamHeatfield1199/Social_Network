@@ -1,10 +1,10 @@
 //работаем с redux
-import  thunkMiddleware  from "redux-thunk";
 import { applyMiddleware, combineReducers, createStore } from "redux";
+import { reducer as formReducer } from "redux-form";
+import thunkMiddleware from "redux-thunk";
 import authReducer from "./authReducer";
 import dialogsReducer from "./dialogsReducer";
 import profileReducer from "./profileReducer";
-
 import userReducer from "./usersReducer";
 
 //создаем объекты для хранения методов reducer
@@ -13,6 +13,7 @@ let reducers = combineReducers({
   messagesPage: dialogsReducer,
   usersPage: userReducer,
   auth: authReducer,
+  form: formReducer,
 });
 
 //cоздаем наш store, передаем reducer
