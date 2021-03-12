@@ -2,6 +2,7 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { reducer as formReducer } from "redux-form";
 import thunkMiddleware from "redux-thunk";
+import appReducer from "./appReducer";
 import authReducer from "./authReducer";
 import dialogsReducer from "./dialogsReducer";
 import profileReducer from "./profileReducer";
@@ -14,6 +15,7 @@ let reducers = combineReducers({
   usersPage: userReducer,
   auth: authReducer,
   form: formReducer,
+  app: appReducer,
 });
 
 //cоздаем наш store, передаем reducer
