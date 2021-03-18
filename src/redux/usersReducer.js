@@ -130,7 +130,7 @@ export const followingInProgressActionCreator = (isFetching, userId) => {
 export const getUsersThunkCreator = (currentPage, pageSize) => {
   return (dispatch) => {
     dispatch(toggleIsfetchingActionCreator(true))
-
+    dispatch(setCurrentPageActionCreator(currentPage))
     userAPI.getUsers(currentPage, pageSize).then((data) => {
       dispatch(toggleIsfetchingActionCreator(false));
       dispatch(setUsersActionCreator(data.items));

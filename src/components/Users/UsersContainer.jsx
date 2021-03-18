@@ -2,7 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import preloader from '../../images/2.gif';
-import { followActionCreator, followingInProgressActionCreator, followThunkCreator, getUsersThunkCreator, setCurrentPageActionCreator, unfollowActionCreator, unfollowThunkCreator } from '../../redux/usersReducer';
+import {
+  followingInProgressActionCreator,
+  followThunkCreator,
+  getUsersThunkCreator,
+  setCurrentPageActionCreator,
+  unfollowThunkCreator
+} from '../../redux/usersReducer';
+import {getUsers, 
+  getPageSize, 
+  getTotalUsersCount, 
+  getCurrentPage,
+  getIsFetching,
+  getFollowingInProgress,} from '../../redux/usersSelectors'
 import { withAuthRedirect } from '../hoc/AuthRedirect';
 import Users from './Users';
 
@@ -35,12 +47,13 @@ class UsersContainer extends React.Component {
 
 let mapStateToProps = (state) => {
   return {
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    currentPage: state.usersPage.currentPage,
-    isFetching: state.usersPage.isFetching,
-    followingInProgress: state.usersPage.followingInProgress
+   // users: getUsers(state),
+    users: getUsers(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    followingInProgress: getFollowingInProgress(state)
   }
 }
 
@@ -51,7 +64,7 @@ export default compose(
     followInProgress: followingInProgressActionCreator,
     getUsers: getUsersThunkCreator,
     unfollow: unfollowThunkCreator,
-  
+
   }),
   withAuthRedirect
 )(UsersContainer)

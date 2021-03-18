@@ -9,8 +9,8 @@ import Login from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import UsersContainer from "./components/Users/UsersContainer";
-import { initializeAppTC } from "./redux/appReducer";
 import preloader from './images/2.gif';
+import { initializeAppTC } from "./redux/appReducer";
 
 class App extends React.Component {
   componentDidMount() {
