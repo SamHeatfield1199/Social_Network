@@ -1,7 +1,7 @@
 import { stopSubmit } from "redux-form";
 import { authAPI } from "../api/api";
 
-const SET_USER_DATA = "SET_USER_DATA";
+const SET_USER_DATA = "my-network/auth/SET_USER_DATA";
 
 let initialState = {
   id: null,
@@ -21,7 +21,6 @@ const authReducer = (state = initialState, action) => {
       return state;
   }
 };
-
 export const setUserActionCreator = (id, email, login, isAuth) => {
   return {
     type: SET_USER_DATA,
@@ -29,33 +28,35 @@ export const setUserActionCreator = (id, email, login, isAuth) => {
   };
 };
 
-export const getAuthUserDataTC = () => (dispatch) => {
-  authAPI.authMe().then(response => {
-    if (response.data.resultCode === 0) {
-      let { id, login, email } = response.data.data;
-      dispatch(setUserActionCreator(id, email, login, true));
-    }
-  });
-};
-//пользователь логинится и мы его авторизуем
-export const login = (email, password, rememberMe) => (dispatch) => {
-  authAPI.login(email, password, rememberMe).then(response => {
-    if (response.data.resultCode === 0) {
-      dispatch(getAuthUserDataTC());
-    } else {
-      let message = response.data.messages.length > 0 ? response.data.messages[0] : "Some error"
-      //останавливаем подтвержение, если не получилось залогиниться.
-      dispatch(stopSubmit("login", { _error: message }));
-    }
-  });
+//поменяли then на async/await, т.к. сейчас используется он
+export const getAuthUserDataTC = () => async (dispatch) => {
+  let response = await authAPI.authMe();
+  if (response.data.resultCode === 0) {
+    let { id, login, email } = response.data.data;
+    dispatch(setUserActionCreator(id, email, login, true));
+  }
 };
 
-export const logout = () => (dispatch) => {
-  authAPI.logout().then(response => {
-    if (response.data.resultCode === 0) {
-      dispatch(setUserActionCreator(null, null, null, false));
-    }
-  });
+//пользователь логинится и мы его авторизуем
+export const login = (email, password, rememberMe) => async (dispatch) => {
+  let response = await authAPI.login(email, password, rememberMe);
+  if (response.data.resultCode === 0) {
+    dispatch(getAuthUserDataTC());
+  } else {
+    let message =
+      response.data.messages.length > 0
+        ? response.data.messages[0]
+        : "Some error";
+    //останавливаем подтвержение, если не получилось залогиниться.
+    dispatch(stopSubmit("login", { _error: message }));
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  let response = await authAPI.logout();
+  if (response.data.resultCode === 0) {
+    dispatch(setUserActionCreator(null, null, null, false));
+  }
 };
 
 export default authReducer;

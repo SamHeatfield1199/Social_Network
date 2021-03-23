@@ -5,44 +5,24 @@ import { Redirect } from "react-router";
 import { Field, reduxForm } from "redux-form"
 import { login, logout } from "../../redux/authReducer";
 import { maxLengthCreator, requiredField } from "../../utils/validators/validator";
-import { Input } from "../common/formsControls/FormsControls";
+import { CreateField, Input } from "../common/formsControls/FormsControls";
+//деструктуризировали парметры(достали только то, что нужно из пропсов)
+const LoginForm = ({ handleSubmit, error }) => {
+    return <form onSubmit={handleSubmit}>
+        {CreateField("Email", "email", [requiredField], Input)}
+        {CreateField('Password', 'password', [requiredField], Input, { type: "password" })}
+        {CreateField("", 'rememberMe', [], Input, { type: "checkbox" }, "remember me")}
 
-
-
-const maxLength = maxLengthCreator(50)
-
-
-const LoginForm = (props) => {
-    return <form onSubmit={props.handleSubmit}>
-        <div>
-            <Field placeholder={'Email'}
-                name={'email'}
-                component={Input}
-                validate={[requiredField]}
-            />
-        </div>
-        <div>
-            <Field placeholder={'Password'}
-                name={'password'}
-                type={"password"}
-                component={Input}
-                validate={[requiredField]} />
-        </div>
-        <div>
-            <Field component={Input}
-                name={'rememberMe'}
-                type={"checkbox"} />  remember me
-            </div>
-        {props.error && <div className={classes.formSummaryError}>
-            {props.error}
+        {error && <div className={classes.formSummaryError}>
+            {error}
         </div>
         }
         <div>
             <button>Login</button>
         </div>
-
     </form>
 }
+
 const ReduxLoginForm = reduxForm({
     form: 'login'
 })(LoginForm)

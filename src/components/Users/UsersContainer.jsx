@@ -9,7 +9,7 @@ import {
   setCurrentPageActionCreator,
   unfollowThunkCreator
 } from '../../redux/usersReducer';
-import {getUsers, 
+import {getUser, 
   getPageSize, 
   getTotalUsersCount, 
   getCurrentPage,
@@ -47,8 +47,7 @@ class UsersContainer extends React.Component {
 
 let mapStateToProps = (state) => {
   return {
-   // users: getUsers(state),
-    users: getUsers(state),
+    users: getUser(state),
     pageSize: getPageSize(state),
     totalUsersCount: getTotalUsersCount(state),
     currentPage: getCurrentPage(state),

@@ -20,9 +20,6 @@ import { initializeAppTC } from "./redux/appReducer";
 4. чистая функция должна вернуть (return) что-либо)))
 */
 
-
-
-
 class App extends React.Component {
   componentDidMount() {
     this.props.initializeApp();

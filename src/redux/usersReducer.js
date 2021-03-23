@@ -1,4 +1,6 @@
+import { act } from "react-dom/test-utils";
 import { followUser, getUsers, userAPI } from "../api/api";
+import { updateObjectInArray } from "../utils/objectelpers";
 
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
@@ -22,24 +24,16 @@ const userReducer = (state = initialState, action) => {
     case FOLLOW:
       return {
         ...state,
-        //users: {...state.users}
-        users: state.users.map((u) => {
-          if (u.id === action.userId) {
-            return { ...u, followed: true };
-          }
-          return u;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: true,
         }),
       };
 
     case UNFOLLOW:
       return {
         ...state,
-        //users: {...state.users}
-        users: state.users.map((u) => {
-          if (u.id === action.userId) {
-            return { ...u, followed: false };
-          }
-          return u;
+        users: updateObjectInArray(state.users, action.userId, "id", {
+          followed: false,
         }),
       };
 
@@ -128,38 +122,44 @@ export const followingInProgressActionCreator = (isFetching, userId) => {
 //thunk - функция, которая выполняет асинхронную работу и диспатчит экшены, чтобы ui не создаввал запросы к dal
 //и все происходило в бизнес логике
 export const getUsersThunkCreator = (currentPage, pageSize) => {
-  return (dispatch) => {
-    dispatch(toggleIsfetchingActionCreator(true))
-    dispatch(setCurrentPageActionCreator(currentPage))
-    userAPI.getUsers(currentPage, pageSize).then((data) => {
-      dispatch(toggleIsfetchingActionCreator(false));
-      dispatch(setUsersActionCreator(data.items));
-      dispatch(setTotalUsersCountActionCreator(data.totalCount));
-    });
+  return async (dispatch) => {
+    dispatch(toggleIsfetchingActionCreator(true));
+    dispatch(setCurrentPageActionCreator(currentPage));
+    let data = await userAPI.getUsers(currentPage, pageSize);
+    dispatch(toggleIsfetchingActionCreator(false));
+    dispatch(setUsersActionCreator(data.items));
+    dispatch(setTotalUsersCountActionCreator(data.totalCount));
   };
 };
 
+const followUnfollowFlow = async (dispatch, id, apiMethod, actionCreator) => {
+  dispatch(followingInProgressActionCreator(true, id));
+  let data = await apiMethod(id);
+  if (data.resultCode === 0) {
+    dispatch(actionCreator(id));
+  }
+  dispatch(followingInProgressActionCreator(false, id));
+};
+
 export const followThunkCreator = (id) => {
-  return (dispatch) => {
-    dispatch(followingInProgressActionCreator(true, id))
-    userAPI.followUser(id).then(data => {
-        if (data.resultCode === 0) {
-          dispatch(followActionCreator(id))
-        }
-        dispatch(followingInProgressActionCreator(false, id))
-    })
+  return async (dispatch) => {
+    followUnfollowFlow(
+      dispatch,
+      id,
+      userAPI.followUser.bind(userAPI),
+      followActionCreator
+    );
   };
 };
 
 export const unfollowThunkCreator = (id) => {
-  return (dispatch) => {
-    dispatch(followingInProgressActionCreator(true, id))
-    userAPI.followUser(id).then(data => {
-        if (data.resultCode === 0) {
-          dispatch(followActionCreator(id))
-        }
-        dispatch(followingInProgressActionCreator(false, id))
-    })
+  return async (dispatch) => {
+    followUnfollowFlow(
+      dispatch,
+      id,
+      userAPI.unfollowUser.bind(userAPI),
+      unfollowActionCreator
+    );
   };
 };
 
