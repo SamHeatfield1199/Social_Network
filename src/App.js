@@ -1,13 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Route, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
-import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import Navbar from "./components/Navbar/Navbar";
-import ProfileContainer from "./components/Profile/ProfileContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import preloader from './images/2.gif';
 import { initializeAppTC } from "./redux/appReducer";
@@ -19,6 +17,9 @@ import { initializeAppTC } from "./redux/appReducer";
 3. детерменированность\идемпотентность  -  сколько бы раз на вход чистой функции не подавали одно и тоже, на выходе чистой функции должен быть один и тот же результат
 4. чистая функция должна вернуть (return) что-либо)))
 */
+
+const DialogsContainer = React.lazy(() => import("./components/Dialogs/DialogsContainer"))
+const ProfileContainer = React.lazy(() => import("./components/Profile/ProfileContainer"))
 
 class App extends React.Component {
   componentDidMount() {
@@ -34,9 +35,19 @@ class App extends React.Component {
         <Navbar />
 
         <div className="app-wrapper-content">
-          <Route path="/dialogs" render={() => <DialogsContainer />} />
+          <Route path="/dialogs" 
+          render={() =>{
+            return <Suspense fallback = {<div>Loading...</div>}>
+            <DialogsContainer />
+            </Suspense>
+            }} />
 
-          <Route path="/profile/:userid?" render={() => <ProfileContainer />} />
+          <Route path="/profile/:userid?" render={() => {
+            <Suspense fallback = {<div>Loading...</div>}>
+               <ProfileContainer />
+            </Suspense>
+          }} />
+         
           <Route path="/users" render={() => <UsersContainer />} />
           <Route path="/login" render={() => <Login />} />
         </div>
