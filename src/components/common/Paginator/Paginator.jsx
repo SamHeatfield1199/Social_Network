@@ -30,12 +30,12 @@ let Paginator = ({ currentPage, onPageChanged, totalUsersCount, pageSize, portio
 
         {pages.filter(p => p >= leftPoryionPageNumber && p <= rightPoryionPageNumber)
             .map(p => {
-                return <span className=
+                return <span /*className=
                     {
                         cn({
                             [classes.selectedPage]: currentPage === p
                         }
-                            , classes.selectedPage)}
+                            , classes.selectedPage)}*/
                     onClick={
                         (e) => {
                             onPageChanged(p)
