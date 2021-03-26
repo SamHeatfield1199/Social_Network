@@ -30,7 +30,7 @@ const ProfileStatusWithHooks = (props) => {
     //закидываем функцию, которая будет выполняться после отрисовки страницы
     useEffect(() => {
         setStatus(props.status)
-    }, [])
+    }, [props.status])
 
 
     const activateEditMode = () => {
@@ -42,7 +42,6 @@ const ProfileStatusWithHooks = (props) => {
     }
     const onStatusChange = (e) => {
         setStatus(e.currentTarget.value)
-
     }
 
 
@@ -51,6 +50,7 @@ const ProfileStatusWithHooks = (props) => {
         <div>
             {!editMode &&
                 <div>
+                    <b>Status</b>:
                     <span onDoubleClick={activateEditMode}>
                         {props.status || "-----"}
                     </span>

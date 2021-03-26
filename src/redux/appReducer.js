@@ -1,6 +1,6 @@
 import { stopSubmit } from "redux-form";
 import { authAPI } from "../api/api";
-import { getAuthUserDataTC } from "./authReducer";
+import { getAuthUserData } from "./authReducer";
 
 const SET_INITIALIZED = "SET_INITIALIZED";
 
@@ -28,7 +28,7 @@ export const initializedSuccesActionCreator = () => {
 
 export const initializeAppTC = () => (dispatch) => {
   //когда получим данные из auth проинициализируемся
-  let promise = dispatch(getAuthUserDataTC())
+  let promise = dispatch(getAuthUserData())
   Promise.all([promise])
   .then(() =>{
     dispatch(initializedSuccesActionCreator())

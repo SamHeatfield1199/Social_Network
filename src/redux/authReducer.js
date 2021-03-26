@@ -4,7 +4,7 @@ import { authAPI } from "../api/api";
 const SET_USER_DATA = "my-network/auth/SET_USER_DATA";
 
 let initialState = {
-  id: null,
+  userId: null,
   email: null,
   login: null,
   isAuth: false,
@@ -21,19 +21,19 @@ const authReducer = (state = initialState, action) => {
       return state;
   }
 };
-export const setUserActionCreator = (id, email, login, isAuth) => {
+export const setAuthUserData = (userId, email, login, isAuth) => {
   return {
     type: SET_USER_DATA,
-    payload: { id, email, login, isAuth },
+    payload: {userId, email, login, isAuth },
   };
 };
 
 //поменяли then на async/await, т.к. сейчас используется он
-export const getAuthUserDataTC = () => async (dispatch) => {
+export const getAuthUserData = () => async (dispatch) => {
   let response = await authAPI.authMe();
   if (response.data.resultCode === 0) {
-    let { id, login, email } = response.data.data;
-    dispatch(setUserActionCreator(id, email, login, true));
+    let { userId, login, email } = response.data.data;
+    dispatch(setAuthUserData(userId, email, login, true));
   }
 };
 
@@ -41,7 +41,7 @@ export const getAuthUserDataTC = () => async (dispatch) => {
 export const login = (email, password, rememberMe) => async (dispatch) => {
   let response = await authAPI.login(email, password, rememberMe);
   if (response.data.resultCode === 0) {
-    dispatch(getAuthUserDataTC());
+    dispatch(getAuthUserData());
   } else {
     let message =
       response.data.messages.length > 0
@@ -55,7 +55,7 @@ export const login = (email, password, rememberMe) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   let response = await authAPI.logout();
   if (response.data.resultCode === 0) {
-    dispatch(setUserActionCreator(null, null, null, false));
+    dispatch(setAuthUserData(null, null, null, false));
   }
 };
 
