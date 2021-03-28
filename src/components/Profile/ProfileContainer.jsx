@@ -12,14 +12,25 @@ import Profile from './Profile';
 //делаем компоненту вручную
 class ProfileContainer extends React.Component {
 
-  componentDidMount() {
+  refreshProfile() {
     let userid = this.props.match.params.userid
     if (!userid) {
       userid = this.props.authedUserid
+      if (!userid) {
+        this.props.history.push("/login")
+      }
     }
     this.props.getUserProfile(userid)
     this.props.getUserStatus(userid)
 
+  }
+  componentDidMount(){
+    this.refreshProfile()
+  }
+  componentDidUpdate(prevProps, prevState, snapshot){
+    if(this.props.match.params.userid != prevProps.match.params.userid){
+      this.refreshProfile()
+    }
   }
 
   render() {

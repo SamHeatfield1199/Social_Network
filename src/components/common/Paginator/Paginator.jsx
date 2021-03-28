@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import React, { useState } from 'react'
 import classes from './Paginator.module.css'
 
@@ -26,16 +27,15 @@ let Paginator = ({ currentPage, onPageChanged, totalUsersCount, pageSize, portio
             }}>PREV</button>
         }
 
-
-
         {pages.filter(p => p >= leftPoryionPageNumber && p <= rightPoryionPageNumber)
             .map(p => {
-                return <span /*className=
+                return <span className=
                     {
-                        cn({
+                        classNames({
                             [classes.selectedPage]: currentPage === p
                         }
-                            , classes.selectedPage)}*/
+                            , classes.pageNumber)}
+                            key = {p}
                     onClick={
                         (e) => {
                             onPageChanged(p)

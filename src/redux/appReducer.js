@@ -3,6 +3,7 @@ import { authAPI } from "../api/api";
 import { getAuthUserData } from "./authReducer";
 
 const SET_INITIALIZED = "SET_INITIALIZED";
+const INITIALIZED_SUCCESS = "INITIALIZED_SUCCESS";
 
 let initialState = {
   initialized: false
@@ -10,7 +11,7 @@ let initialState = {
 
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_INITIALIZED:
+    case INITIALIZED_SUCCESS:
       return {
         ...state,
         initialized: true,
@@ -20,18 +21,18 @@ const appReducer = (state = initialState, action) => {
   }
 };
 
-export const initializedSuccesActionCreator = () => {
+export const initializedSucces = () => {
   return {
-    type: SET_INITIALIZED,
+    type: INITIALIZED_SUCCESS,
   };
 };
 
-export const initializeAppTC = () => (dispatch) => {
+export const initializeApp = () => (dispatch) => {
   //когда получим данные из auth проинициализируемся
   let promise = dispatch(getAuthUserData())
   Promise.all([promise])
   .then(() =>{
-    dispatch(initializedSuccesActionCreator())
+    dispatch(initializedSucces())
   })
   
 };

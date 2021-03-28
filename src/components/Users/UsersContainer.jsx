@@ -22,7 +22,8 @@ import Users from './Users';
 class UsersContainer extends React.Component {
   //ajax является побочым эффектом, что не подходит чистой функции
   componentDidMount() {
-    this.props.getUsers(this.props.currentPage, this.props.pageSize)
+    const {currentPage, pageSize} = this.props
+    this.props.getUsers(currentPage, pageSize)
   }
 
   onPageChanged = (pageNumber) => {

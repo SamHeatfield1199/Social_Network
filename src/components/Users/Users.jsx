@@ -10,14 +10,15 @@ let Users = (
             onPageChanged={onPageChanged}
             totalUsersCount={totalUsersCount}
             pageSize={pageSize} />
-
-        {
-            users.map(u => <User user={u}
-                followingInProgress={props.followingInProgress}
-                unfollow={props.unfollow}
-                follow={props.follow}
-                key={u.id} />)
-        }
+        <div>
+            {
+                users.map(u => <User user={u}
+                    followingInProgress={props.followingInProgress}
+                    unfollow={props.unfollow}
+                    follow={props.follow}
+                    key={u.id} />)
+            }
         </div>
+    </div>
 }
 export default Users

@@ -21,11 +21,10 @@ const ProfileInfo = (profile, saveProfile, ...props) => {
     }
   }
 
-  const onSubmit = (formData) => {
-    saveProfile(formData).then(() => {
-      setEditMode(false)
-    })
-
+  const onSubmit =  (formData) => {
+     saveProfile(formData).then(() =>{
+       setEditMode(false)
+     })
   }
 
   return (
@@ -50,7 +49,7 @@ const ProfileInfo = (profile, saveProfile, ...props) => {
 }
 
 
-const ProfileData = (profile, isOwner, toEditMode) => {
+const ProfileData = ({profile, isOwner, toEditMode}) => {
   return <div>
     {isOwner && <div>
       <button onClick={toEditMode}>Edit</button>
